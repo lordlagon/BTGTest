@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Border
+    x:Class="Core.ItemCustomerView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="root"
+    Padding="16"
+    Stroke="{AppThemeBinding Light={StaticResource Black},
+                             Dark={StaticResource White}}"
+    StrokeShape="RoundRectangle 10">
+    <Grid
+        ColumnDefinitions="*, Auto,Auto"
+        ColumnSpacing="16"
+        RowDefinitions="Auto, Auto, Auto">
+        <Label FontSize="Body">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Nome: " />
+                    <Span Text="{Binding Name, Source={x:Reference root}}" />
+                    <Span Text=" " />
+                    <Span Text="{Binding LastName, Source={x:Reference root}}" />
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Label Grid.Row="1" FontSize="Body">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Idade: " />
+                    <Span Text="{Binding Age, Source={x:Reference root}}" />
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Label Grid.Row="2" FontSize="Body">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Endereço: " />
+                    <Span Text="{Binding Address, Source={x:Reference root}}" />
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Border
+            Grid.RowSpan="3"
+            Grid.Column="1"
+            Padding="10"
+            BackgroundColor="LightSalmon"
+            StrokeShape="RoundRectangle 4">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding DeleteCommand, Source={x:Reference root}}" CommandParameter="{Binding DeleteCommandParameter, Source={x:Reference root}}" />
+            </Border.GestureRecognizers>
+            <VerticalStackLayout VerticalOptions="CenterAndExpand">
+                <Image
+                    Grid.RowSpan="2"
+                    Grid.Column="1"
+                    Source="trash.png" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    Text="Deletar"
+                    TextColor="{AppThemeBinding Light={StaticResource White},
+                                                Dark={StaticResource Black}}" />
+            </VerticalStackLayout>
+        </Border>
+        <Border
+            Grid.RowSpan="3"
+            Grid.Column="2"
+            Padding="12"
+            BackgroundColor="LightGreen"
+            StrokeShape="RoundRectangle 4">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding EditCommand, Source={x:Reference root}}" CommandParameter="{Binding EditCommandParameter, Source={x:Reference root}}" />
+            </Border.GestureRecognizers>
+            <VerticalStackLayout VerticalOptions="CenterAndExpand">
+                <Image HeightRequest="24" Source="edit.png" />
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Medium"
+                    Text="Editar"
+                    TextColor="{AppThemeBinding Light={StaticResource White},
+                                                Dark={StaticResource Black}}" />
+
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+
+</Border>

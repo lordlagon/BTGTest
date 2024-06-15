@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Core.CustomerCreatePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Core"
+    Title="CustomerCreatePage"
+    x:DataType="local:CustomerCreateViewModel">
+    <Grid
+        Margin="16"
+        ColumnDefinitions="*,*"
+        ColumnSpacing="8"
+        RowDefinitions="Auto, Auto, Auto, Auto, Auto"
+        RowSpacing="8">
+        <local:EntryFloatLabel
+            Title="Nome"
+            Grid.ColumnSpan="2"
+            Text="{Binding Item.Name}" />
+        <local:EntryFloatLabel
+            Title="Sobrenome"
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            Text="{Binding Item.LastName}" />
+        <local:EntryFloatLabel
+            Title="Idade"
+            Grid.Row="2"
+            Grid.ColumnSpan="2"
+            IsOnlyNumber="True"
+            Keyboard="Numeric"
+            Text="{Binding Item.Age}" />
+        <local:EntryFloatLabel
+            Title="Endereço"
+            Grid.Row="3"
+            Grid.ColumnSpan="2"
+            Text="{Binding Item.Address}" />
+        <Button
+            Grid.Row="4"
+            BackgroundColor="White"
+            BorderColor="{StaticResource Primary}"
+            BorderWidth="1"
+            Command="{Binding CancelCommand}"
+            Text="Cancelar"
+            TextColor="{StaticResource Primary}"
+            VerticalOptions="End" />
+        <Button
+            Grid.Row="4"
+            Grid.Column="1"
+            Command="{Binding SaveCommand}"
+            Text="Cadastrar"
+            VerticalOptions="End" />
+    </Grid>
+</ContentPage>
