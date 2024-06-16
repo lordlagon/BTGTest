@@ -1,6 +1,6 @@
 ﻿namespace Core;
 
-public abstract partial class BaseItemViewModel<T> : BaseDataViewModel<T> where T : class
+public abstract partial class BaseItemViewModel<T>: BaseDataViewModel<T> where T : class
 {
     [ObservableProperty]
     T? _item;

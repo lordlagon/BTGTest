@@ -1,5 +1,7 @@
 ﻿namespace Core;
-public partial class CustomerCreateViewModel(ICustomerService customerService) : BaseItemViewModel<Customer>
+public partial class CustomerCreateViewModel(ICustomerService customerService, 
+                                             INavigationService navigationService) 
+    : BaseItemViewModel<Customer>(navigationService)
 {
     private readonly ICustomerService _customerService = customerService;
 
@@ -13,6 +15,14 @@ public partial class CustomerCreateViewModel(ICustomerService customerService) :
             CustomerId = (string)query["CustomerId"];
         }
         InitializeAsync();
+    }
+    public override Task InitializeAsync(object navigationData)
+    {
+        if (navigationData != null)
+        {
+
+        }
+        return base.InitializeAsync(navigationData);
     }
 
     protected override async Task<Customer> GetDataAsync()

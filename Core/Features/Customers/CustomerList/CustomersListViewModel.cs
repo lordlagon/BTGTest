@@ -1,12 +1,9 @@
-﻿
-
-namespace Core;
+﻿namespace Core;
 public partial class CustomersListViewModel : BaseListViewModel<Customer>
 {
-    private readonly ICustomerService _customerService;
+    readonly ICustomerService _customerService;
 
-
-    public CustomersListViewModel(ICustomerService customerService)
+    public CustomersListViewModel(ICustomerService customerService, INavigationService navigationService): base(navigationService)
     {
         _customerService = customerService;
         WeakReferenceMessenger.Default.Register<MyMessage>(this, (r, m) => { RefreshDataAsync(); });
@@ -17,38 +14,35 @@ public partial class CustomersListViewModel : BaseListViewModel<Customer>
     async Task Add()
     {
 #if WINDOWS
-        var viewModel = new CustomerCreateViewModel(_customerService);
+        var viewModel = new CustomerCreateViewModel(_customerService, _navigationService);
         await viewModel.InitializeAsync(null);
-        var secondWindow = new Window
-        {
-            Page = new CustomerCreatePage(viewModel) { },
-            
-        };
-        secondWindow.MaximumHeight = 500;
-        secondWindow.MaximumWidth = 800;
-
-        Application.Current.OpenWindow(secondWindow);
+        await _navigationService.NavigateToAsync($"{nameof(CustomerCreatePage)}", page: new CustomerCreatePage(viewModel));
+#else
+        await _navigationService.NavigateToAsync($"{nameof(CustomerCreatePage)}");
 #endif
-        //await Shell.Current.GoToAsync(nameof(CustomerCreatePage));
     }
 
     [RelayCommand]
     async Task Edit(Customer item)
     {
-        var param = new ShellNavigationQueryParameters
-        {
-            { "CustomerId", item.Id }
-        };
-        await Shell.Current.GoToAsync(nameof(CustomerCreatePage), param);
+        var param = new ShellNavigationQueryParameters { { "CustomerId", item.Id } };
+#if WINDOWS
+        var viewModel = new CustomerCreateViewModel(_customerService, _navigationService);
+        await viewModel.InitializeAsync(param);
+        await _navigationService.NavigateToAsync($"{nameof(CustomerCreatePage)}", new CustomerCreatePage(viewModel),param);
+#else
+        await _navigationService.NavigateToAsync($"{nameof(CustomerCreatePage)}", routeParameters: param);
+#endif
+
     }
     [RelayCommand]
     async Task Delete(Customer item)
     {
-        var result = await Shell.Current.DisplayAlert("Alerta", "Deseja mesmo deletar o cliente?","sim","não");
+        var result = await Shell.Current.DisplayAlert("Alerta", "Deseja mesmo deletar o cliente?", "sim", "não");
         if (result)
         {
             await _customerService.RemoveCustomer(item);
-        }        
+        }
         await RefreshDataAsync();
     }
 

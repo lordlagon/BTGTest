@@ -8,7 +8,7 @@ public abstract class BaseDataViewModel<T> : BaseViewModel where T : class
         get { return _dataLoaded; }
         private set { SetProperty(ref _dataLoaded, value); }
     }
-    protected BaseDataViewModel() => Init();
+    protected BaseDataViewModel(INavigationService navigationService) : base(navigationService) => Init();
 
     void Init()
     {

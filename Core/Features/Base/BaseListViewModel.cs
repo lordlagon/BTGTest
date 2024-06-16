@@ -8,7 +8,7 @@ public abstract partial class BaseListViewModel<T> : BaseDataViewModel<IEnumerab
     [ObservableProperty]
     T? _selectedItem;
 
-    protected BaseListViewModel() => Init();
+    protected BaseListViewModel(INavigationService navigationService): base(navigationService) => Init();
 
     void Init()
     {

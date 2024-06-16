@@ -1,13 +1,13 @@
 ﻿namespace Core;
 
-public abstract partial class BaseViewModel() : ObservableObject, IDisposable, IQueryAttributable
-{
+public abstract partial class BaseViewModel : ObservableObject, IDisposable, IQueryAttributable
+{    
+    public event BusyChange? BusyChanged;
+    
     [ObservableProperty]
     bool _isLoading;
-
-    public event BusyChange? BusyChanged;
-
     private bool _isBusy;
+
     public bool IsBusy
     {
         get => _isBusy;
