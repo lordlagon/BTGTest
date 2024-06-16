@@ -44,9 +44,12 @@ public partial class CustomersListViewModel : BaseListViewModel<Customer>
     [RelayCommand]
     async Task Delete(Customer item)
     {
-        _customerService.RemoveCustomer(item);
-        Items?.Clear();
-        RefreshDataAsync();
+        var result = await Shell.Current.DisplayAlert("Alerta", "Deseja mesmo deletar o cliente?","sim","não");
+        if (result)
+        {
+            await _customerService.RemoveCustomer(item);
+        }        
+        await RefreshDataAsync();
     }
 
     protected override Task<IEnumerable<Customer>> GetDataAsync()
