@@ -13,3 +13,10 @@ global using System.Windows.Input;
 global using System.Collections.ObjectModel;
 global using System.ComponentModel;
 global using System.Runtime.CompilerServices;
+global using CommunityToolkit.Mvvm.Messaging;
+global using CommunityToolkit.Mvvm.Messaging.Messages;
+
+#if WINDOWS
+global using Microsoft.UI;
+global using Microsoft.UI.Windowing;
+#endif

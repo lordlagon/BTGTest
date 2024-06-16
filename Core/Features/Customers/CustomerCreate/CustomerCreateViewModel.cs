@@ -1,5 +1,4 @@
 ﻿namespace Core;
-
 public partial class CustomerCreateViewModel(ICustomerService customerService) : BaseItemViewModel<Customer>
 {
     private readonly ICustomerService _customerService = customerService;
@@ -18,24 +17,32 @@ public partial class CustomerCreateViewModel(ICustomerService customerService) :
 
     protected override async Task<Customer> GetDataAsync()
     {
-        if(CustomerId == null) { return new Customer(); }
+        if (CustomerId == null) { return new Customer(); }
         return await _customerService.GetCustomerById(CustomerId);
     }
 
     [RelayCommand]
     async Task Save()
-    {        
+    {
         await _customerService.AddUpdateCustomer(new Customer { Id = CustomerId ?? Guid.NewGuid().ToString(), Name = Item.Name, LastName = Item.LastName, Address = Item.Address, Age = Item.Age }).Handle(this);
-        await Shell.Current.GoToAsync("..");
+        WeakReferenceMessenger.Default.Send(new MyMessage("customer"));
+        CloseCommand.Execute(null);
     }
     [RelayCommand]
 
-    static async Task Cancel() 
-        => await Shell.Current.GoToAsync("..");
+    async Task Close()
+    {
+#if WINDOWS
+        var window = Application.Current.Windows.LastOrDefault();
+        Application.Current.CloseWindow(window);
+#else
+        await Shell.Current.GoToAsync("..");
+#endif
+    }
 
     public override Task Back(object parameter)
     {
-        CancelCommand.Execute(parameter);
+        CloseCommand.Execute(parameter);
         return base.Back(parameter);
-    }    
+    }
 }

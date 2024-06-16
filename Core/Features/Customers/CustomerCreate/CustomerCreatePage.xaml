@@ -38,7 +38,7 @@
             BackgroundColor="White"
             BorderColor="{StaticResource Primary}"
             BorderWidth="1"
-            Command="{Binding CancelCommand}"
+            Command="{Binding CloseCommand}"
             Text="Cancelar"
             TextColor="{StaticResource Primary}"
             VerticalOptions="End" />
