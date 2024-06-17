@@ -3,24 +3,30 @@
 public interface INavigationService
 {
     Task InitializeAsync();
-    Task NavigateToAsync(string Route, Page page = null, IDictionary<string, object> routeParameters = null);
+    Task NavigateToAsync(string route, Page page = null, BaseViewModel viewModel = null, IDictionary<string, object> routeParameters = null);
     Task PopAsync();
 }
 
 public class NavigationService : INavigationService
-{    
+{
     public Task InitializeAsync()
     {
         return NavigateToAsync($"{nameof(CustomersListPage)}");
     }
 
-    public async Task NavigateToAsync(string route, Page page = null, IDictionary<string, object> routeParameters = null)
+    public async Task NavigateToAsync(string route, Page page = null, BaseViewModel viewModel = null, IDictionary<string, object> routeParameters = null)
     {
-#if WINDOWS        
-        var newWindow = new Window { Page = page };
-        newWindow.MaximumHeight = 500;
-        newWindow.MaximumWidth = 800;
-        Application.Current.OpenWindow(newWindow);        
+#if WINDOWS
+        if (viewModel != null)
+        {
+            if (routeParameters != null)
+                await viewModel.InitializeAsync(routeParameters);
+            else
+                await viewModel.InitializeAsync(null);
+        }
+        var newWindow = new Window { Page = page, X = -300, Y = 300, Height = 500, Width = 800, Title = page.Title };
+
+        Application.Current.OpenWindow(newWindow);
 #else
         if (routeParameters != null)
             await Shell.Current.GoToAsync(route, routeParameters);

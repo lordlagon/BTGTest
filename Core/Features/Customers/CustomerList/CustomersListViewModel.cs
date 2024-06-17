@@ -3,7 +3,7 @@ public partial class CustomersListViewModel : BaseListViewModel<Customer>
 {
     readonly ICustomerService _customerService;
 
-    public CustomersListViewModel(ICustomerService customerService, INavigationService navigationService): base(navigationService)
+    public CustomersListViewModel(ICustomerService customerService, INavigationService navigationService) : base(navigationService)
     {
         _customerService = customerService;
         WeakReferenceMessenger.Default.Register<MyMessage>(this, (r, m) => { RefreshDataAsync(); });
@@ -15,8 +15,7 @@ public partial class CustomersListViewModel : BaseListViewModel<Customer>
     {
 #if WINDOWS
         var viewModel = new CustomerCreateViewModel(_customerService, _navigationService);
-        await viewModel.InitializeAsync(null);
-        await _navigationService.NavigateToAsync($"{nameof(CustomerCreatePage)}", page: new CustomerCreatePage(viewModel));
+        await _navigationService.NavigateToAsync($"{nameof(CustomerCreatePage)}", new CustomerCreatePage(viewModel),viewModel);
 #else
         await _navigationService.NavigateToAsync($"{nameof(CustomerCreatePage)}");
 #endif
@@ -28,8 +27,7 @@ public partial class CustomersListViewModel : BaseListViewModel<Customer>
         var param = new ShellNavigationQueryParameters { { "CustomerId", item.Id } };
 #if WINDOWS
         var viewModel = new CustomerCreateViewModel(_customerService, _navigationService);
-        await viewModel.InitializeAsync(param);
-        await _navigationService.NavigateToAsync($"{nameof(CustomerCreatePage)}", new CustomerCreatePage(viewModel),param);
+        await _navigationService.NavigateToAsync($"{nameof(CustomerCreatePage)}", new CustomerCreatePage(viewModel),viewModel, param);
 #else
         await _navigationService.NavigateToAsync($"{nameof(CustomerCreatePage)}", routeParameters: param);
 #endif
@@ -42,8 +40,8 @@ public partial class CustomersListViewModel : BaseListViewModel<Customer>
         if (result)
         {
             await _customerService.RemoveCustomer(item);
+            await RefreshDataAsync();
         }
-        await RefreshDataAsync();
     }
 
     protected override Task<IEnumerable<Customer>> GetDataAsync()

@@ -1,7 +1,6 @@
 ﻿namespace Core;
-public partial class CustomerCreateViewModel(ICustomerService customerService, 
-                                             INavigationService navigationService) 
-    : BaseItemViewModel<Customer>(navigationService)
+public partial class CustomerCreateViewModel(ICustomerService customerService, INavigationService navigationService)
+        : BaseItemViewModel<Customer>(navigationService)
 {
     private readonly ICustomerService _customerService = customerService;
 
@@ -18,9 +17,10 @@ public partial class CustomerCreateViewModel(ICustomerService customerService,
     }
     public override Task InitializeAsync(object navigationData)
     {
-        if (navigationData != null)
+        if (navigationData is IDictionary<string, object> query)
         {
-
+            CustomerId = (string)query["CustomerId"];
+            InitializeAsync();
         }
         return base.InitializeAsync(navigationData);
     }
@@ -36,7 +36,7 @@ public partial class CustomerCreateViewModel(ICustomerService customerService,
     {
         await _customerService.AddUpdateCustomer(new Customer { Id = CustomerId ?? Guid.NewGuid().ToString(), Name = Item.Name, LastName = Item.LastName, Address = Item.Address, Age = Item.Age }).Handle(this);
         WeakReferenceMessenger.Default.Send(new MyMessage("customer"));
-        CloseCommand.Execute(null);
+        await Close();
     }
     [RelayCommand]
 
@@ -48,11 +48,5 @@ public partial class CustomerCreateViewModel(ICustomerService customerService,
 #else
         await Shell.Current.GoToAsync("..");
 #endif
-    }
-
-    public override Task Back(object parameter)
-    {
-        CloseCommand.Execute(parameter);
-        return base.Back(parameter);
-    }
+    }   
 }

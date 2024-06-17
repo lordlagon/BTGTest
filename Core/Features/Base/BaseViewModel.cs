@@ -1,7 +1,8 @@
 ﻿namespace Core;
 
-public abstract partial class BaseViewModel : ObservableObject, IDisposable, IQueryAttributable
+public abstract partial class BaseViewModel(INavigationService navigationService) : ObservableObject, IDisposable, IQueryAttributable
 {    
+    public readonly INavigationService _navigationService = navigationService;
     public event BusyChange? BusyChanged;
     
     [ObservableProperty]

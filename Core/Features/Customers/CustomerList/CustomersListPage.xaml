@@ -14,20 +14,21 @@
             Text="Adicionar Cliente" />
     </ContentPage.ToolbarItems>
     <CollectionView Margin="16" ItemsSource="{Binding Items}">
-
+        <CollectionView.ItemsLayout>
+            <LinearItemsLayout ItemSpacing="16" Orientation="Vertical" />
+        </CollectionView.ItemsLayout>
         <CollectionView.EmptyView>
             <VerticalStackLayout HeightRequest="{OnPlatform WinUI={Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=Height}}" VerticalOptions="CenterAndExpand">
                 <Label
                     HorizontalOptions="CenterAndExpand"
                     Text="Nenhum cliente cadastrado"
-                    TextColor="{AppThemeBinding Light={StaticResource Black},
-                                                Dark={StaticResource White}}"
+                    TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
                     VerticalOptions="CenterAndExpand" />
             </VerticalStackLayout>
         </CollectionView.EmptyView>
         <CollectionView.ItemTemplate>
             <DataTemplate x:DataType="local:Customer">
-                <VerticalStackLayout Margin="0,16">
+                <VerticalStackLayout>
                     <local:ItemCustomerView
                         Name="{Binding Name}"
                         Address="{Binding Address}"
@@ -41,6 +42,4 @@
             </DataTemplate>
         </CollectionView.ItemTemplate>
     </CollectionView>
-
-
 </ContentPage>

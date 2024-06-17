@@ -7,8 +7,9 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()    
+            .UseMauiCommunityToolkit()
             .RegisterService()
+            .RegisterPageViewModel()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -16,21 +17,24 @@ public static class MauiProgram
             })
             .ConfigureLifecycleEvents(events =>
             {
-#if WINDOWS
+#if WINDOWS             
                 events.AddWindows(windowsLifecycleBuilder =>
                 {
                     windowsLifecycleBuilder.OnWindowCreated(window =>
                     {
                         window.ExtendsContentIntoTitleBar = true;
+
                         var handle = WinRT.Interop.WindowNative.GetWindowHandle(window);
-                        var id = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(handle);
-                        var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(id);
+                        var id = Win32Interop.GetWindowIdFromWindow(handle);
+                        var appWindow = AppWindow.GetFromWindowId(id);
+
                         switch (appWindow.Presenter)
                         {
-                            case Microsoft.UI.Windowing.OverlappedPresenter overlappedPresenter:
+                            case OverlappedPresenter overlappedPresenter:
                                 overlappedPresenter.SetBorderAndTitleBar(true, true);
                                 overlappedPresenter.Maximize();
-                                break;
+                                overlappedPresenter.IsResizable = true;
+                                break;                            
                         }
                     });
                 });
@@ -45,14 +49,20 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-        builder.Services.AddSingleton<IStoreService, StoreService>(); 
-        builder.Services.AddSingleton<ICustomerService, CustomerService>(); 
+        builder.Services.AddSingleton<IStoreService, StoreService>();
+        builder.Services.AddSingleton<ICustomerService, CustomerService>();
+        builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddSingleton<IGenericRepository<Customer>, GenericRepository<Customer>>();
-    
+        return builder;
+    }
+    public static MauiAppBuilder RegisterPageViewModel(this MauiAppBuilder builder)
+    {
         builder.Services.AddTransient<CustomersListPage>();
-        builder.Services.AddTransient<CustomersListViewModel>();
         builder.Services.AddTransient<CustomerCreatePage>();
+
+        builder.Services.AddTransient<CustomersListViewModel>();
         builder.Services.AddTransient<CustomerCreateViewModel>();
         return builder;
+
     }
 }
