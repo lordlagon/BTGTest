@@ -79,9 +79,7 @@
                     Text="Editar"
                     TextColor="{AppThemeBinding Light={StaticResource White},
                                                 Dark={StaticResource Black}}" />
-
             </VerticalStackLayout>
         </Border>
     </Grid>
-
 </Border>

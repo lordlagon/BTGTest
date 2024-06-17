@@ -9,8 +9,6 @@ public partial class CustomersListPage : ContentPage
         InitializeComponent();
         BindingContext = _viewModel = viewModel;
     }
-    protected override void OnAppearing()
-    {
-        _viewModel.RefreshDataAsync();
-    }    
+    protected override void OnAppearing() => RefreshDataAsync();
+    public void RefreshDataAsync() => _viewModel.RefreshDataAsync();
 }

@@ -11,12 +11,21 @@
         Completed="Handle_Completed"
         Focused="Handle_Focused"
         FontSize="14"
-        TextChanged="EntryField_TextChanged"
         IsPassword="{Binding IsPassword, Source={x:Reference this}}"
         Keyboard="{Binding Keyboard, Source={x:Reference this}}"
         ReturnType="{Binding ReturnType, Source={x:Reference this}}"
         Text="{Binding Text, Source={x:Reference this}}"
-        Unfocused="Handle_Unfocused" />
+        TextChanged="EntryField_TextChanged"
+        Unfocused="Handle_Unfocused">
+        <Entry.Triggers>
+            <DataTrigger
+                Binding="{Binding Text, Source={x:Reference this}}"
+                TargetType="Entry"
+                Value="0">
+                <Setter Property="Text" Value="" />
+            </DataTrigger>
+        </Entry.Triggers>
+    </Entry>
     <Label
         x:Name="LabelTitle"
         Padding="8,0"
